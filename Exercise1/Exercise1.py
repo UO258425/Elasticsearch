@@ -32,7 +32,7 @@ def main():
                     "significant_terms":{
                         "field":"selftext",
                         "size":100,
-                        "chi_square":{
+                        "percentage":{
 
                         },
 
@@ -74,20 +74,20 @@ def main():
 
     posts = helpers.scan(es,index="reddit-mentalhealth",query=secondQuery)
 
-    f = open("relatedPostsChi.txt", "wb")
+    f = open("relatedPostsPercentage.txt", "wb")
     # Iteramos sobre los resultados, no es preciso preocuparse de las
     # conexiones consecutivas que hay que hacer con el servidor ES
     for hit in posts:
-        f.write('Author:'.encode("UTF-8"))
+        f.write('{ "author" : "'.encode("UTF-8"))
         f.write(hit["_source"]["author"].encode("UTF-8"))
-        f.write('\n'.encode("UTF-8"))
+        f.write('",\n'.encode("UTF-8"))
         postdate = datetime.datetime.utcfromtimestamp(hit["_source"]["created_utc"] )
-        f.write('Date:'.encode("UTF-8"))
+        f.write('"date" : "'.encode("UTF-8"))
         f.write(postdate.strftime("%m/%d/%Y, %H:%M:%S").encode("UTF-8"))
-        f.write('\n'.encode("UTF-8"))
-        f.write('Post:'.encode("UTF-8"))
+        f.write('",\n'.encode("UTF-8"))
+        f.write('"selftext" : "'.encode("UTF-8"))
         f.write(hit["_source"]["selftext"].encode("UTF-8"))
-        f.write('\n'.encode("UTF-8"))
+        f.write('"\n}\n'.encode("UTF-8"))
 
     f.close()
 
