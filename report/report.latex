@@ -1,0 +1,127 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{graphicx}
+\usepackage{minitoc}
+
+\begin{document}
+
+\title{Elasticsearch assignment}
+\author{UO258425, Carlos Manrique Enguita \\
+UO236405, Daniel Rückert García \\
+UO258454, Violeta Ruiz Martínez}
+\date{\today}
+
+\maketitle
+
+
+
+
+\begin{abstract}
+
+This is the abstract of the project, here we will resume our work briefly
+
+\end{abstract}
+
+
+\tableofcontents
+
+\dosecttoc
+
+\secttoc
+
+\section{Exercise 1}
+We choose "Rehab" as topic to develop this first exercise.
+
+To recover all the posts related to the topic we do a first query in order to
+find the most significant words related to it. To do that we look for the most
+significant words in posts that contain the words {\bf Rehab} and {\bf
+Rehabilitation}. We perform an aggregation in the selftext field. Whe tried this
+first query using three different similarity metrics: Chi square, Google
+normalized distance and percentage. Whe have created an index without stopwords
+so we perform this first query in this index to get the most optimum results.
+
+\subsection{Percentage}
+
+When using percentage we set the maximum number of significant terms to 100
+because it is the one that gets the fewer results. With this metric we get 10
+terms where we consider 5 as relevant:
+\begin{itemize}
+\item Rehabilitation
+\item Rehab
+\item Rehabs
+\item Criminals
+\item Librium (a medical drug)
+\end{itemize}
+
+\subsection{Google normalized distance}
+When we use the Google normalized distance we set the maximum number of
+significant terms to 20 as this metric and the Chi square get the most number of
+results. With this metric we got 20 terms where we consider 9 as relevant:
+\begin{itemize}
+\item Rehab
+\item Rehabilitation
+\item Jail
+\item Facility
+\item Criminals
+\item Outpatient
+\item Heroin
+\item Homicide
+\item Detox
+\end{itemize}
+
+\subsection{Chi square}
+When we used the Chi square metric we also set the maximum number of significant
+terms to 20 as we did for the Google one. Using this metric we also get 20 terms
+and we consider 9 as relevant:
+\begin{itemize}
+\item Rehab
+\item Rehabilitation
+\item Detox
+\item Alcoholism
+\item Sober
+\item Drinking
+\item Criminals
+\item Outpatient
+\item Hospital
+\end{itemize}
+
+After getting the significant terms we perform a second query searching for
+these words in the selftext.
+
+\section{Exercise 2}
+MLT queries do not directly produce a list of significant terms, they produce
+however a list of documents including the relevant terms used to perform the
+query. This is simlar to how Google produces its search results. As we know GND
+uses the documents resturned by google to generate the list of significant
+terms.
+
+Therefore, to perform a similar operation to that of GND we just have to do a
+query for significant terms over the MLT query in order to get the most
+significant terms of those documents.
+
+After performing such operation , we compared the results to those obtained by a
+GND query, obtaining a list of 20 significant terms for each query. Comparing
+the results, we obtained that 75\% of the significant terms were identical.
+However, increasing the number of significant terms to more than 100 reduced
+this accuracy down to 40\%.
+
+Results with 20 significant terms:
+
+\includegraphics[width=\textwidth]{./images/image1.jpg}
+
+Results with 150 significant terms:
+
+\includegraphics[width=\textwidth]{./images/image2.jpg}
+
+
+\section{Exercise 3}
+
+
+\section{Exercise 4}
+
+
+
+
+
+
+
+\end{document}
