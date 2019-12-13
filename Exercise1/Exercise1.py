@@ -17,7 +17,7 @@ def main():
     es = Elasticsearch(['http://elastic.carlosmanrique.dev:9200'])
     # En ocasiones las consultas tienen que formalizarse en JSON
     results = es.search(
-        index="reddit-mentalhealth",
+        index="reddit-mentalhealth-stopwords",
         body = {
             "query": {
                 "match": {
@@ -32,7 +32,7 @@ def main():
                     "significant_terms":{
                         "field":"selftext",
                         "size":100,
-                        "gnd":{
+                        "chi_square":{
 
                         },
 
@@ -74,7 +74,7 @@ def main():
 
     posts = helpers.scan(es,index="reddit-mentalhealth",query=secondQuery)
 
-    f = open("relatedPostsGND.txt", "wb")
+    f = open("relatedPostsChi.txt", "wb")
     # Iteramos sobre los resultados, no es preciso preocuparse de las
     # conexiones consecutivas que hay que hacer con el servidor ES
     for hit in posts:
