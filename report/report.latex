@@ -28,6 +28,8 @@ This is the abstract of the project, here we will resume our work briefly
 
 \secttoc
 
+\newpage
+
 \section{Exercise 1}
 We choose "Rehab" as topic to develop this first exercise.
 
@@ -87,6 +89,7 @@ and we consider 9 as relevant:
 After getting the significant terms we perform a second query searching for
 these words in the selftext.
 
+\newpage
 \section{Exercise 2}
 MLT queries do not directly produce a list of significant terms, they produce
 however a list of documents including the relevant terms used to perform the
@@ -112,14 +115,54 @@ Results with 150 significant terms:
 
 \includegraphics[width=\textwidth]{./images/image2.jpg}
 
-
+\newpage
 \section{Exercise 3}
 
-
+\newpage
 \section{Exercise 4}
 
+The main purpose of this exercise is to obtain a list with the greatest number
+of comorbidity factors with respect to alcoholism.
 
+\subsection{Retrieving the Reddit results}
 
+As we cannot use any expert knowledge as a starting point, we have decided to
+begin using a multi match query about \textbf{"problem with alcohol"} by
+searching the fields selftext, subreddit and title. We take the 10 most relevant
+subreddits from this query which are:
+
+\begin{itemize}
+    \item stopdrinking
+    \item AlAnon
+    \item addiction
+    \item alcoholism
+    \item depression
+    \item Anxiety
+    \item BipolarReddit
+    \item SuicideWatch
+    \item alcoholicsanonymous
+    \item offmychest
+\end{itemize}
+
+\subsection{Publish or Perish}
+
+In order to obtain reliable data on the true comorbities of alcoholism,
+\textbf{Publish or Perish} tool has been used. It allows us to obtain the main
+scientific papers that deal with this topic and are available in Google
+academics. Any document that mentions comorbidities of alcoholism seems relevant
+to our propouses. After indexing the documents, we export them in a JSON file
+called \textbf{PoPAlcoholismComorbidity.json} that will be treated later as
+follows:
+
+\begin{enumerate}
+    \item  We have realized that the only relevant information is contained in the title,
+so we removed anything else from the json objects. 
+    \item All English stopwords have been removed.
+    \item The list of titles has become a list of words
+    \item That list is converted to a dictionary [key, value] containing the
+        word and the frequency of appearance.
+    \item The dictionary is sorted in descending order.
+\end{enumerate}
 
 
 

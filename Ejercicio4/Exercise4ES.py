@@ -1,7 +1,7 @@
 from elasticsearch import Elasticsearch
 
 def main():
-    es = Elasticsearch()
+    es = Elasticsearch(["http://elastic.carlosmanrique.dev:9200"])
 
     subredditsQuery = es.search( index="reddit-mentalhealth-stopwords-stemming-ngrams",
                             body ={
