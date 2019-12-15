@@ -62,13 +62,17 @@ def main():
 
     medications =[]
     f = open("medications.txt", "wb")
+    fPosts = open("significantTerms.txt","wb")
     # Iteramos sobre los resultados, no es preciso preocuparse de las
     # conexiones consecutivas que hay que hacer con el servidor ES
     for hit in results["aggregations"]["Terminos mas significativos"]["buckets"]:
         # get created date for a repo and fallback to authored_date for a commit
         print(str(hit["key"]))
+        fPosts.write(hit["key"].encode("UTF-8"))
+        fPosts.write("\n".encode("UTF-8"))
         entityQuery = "https://www.wikidata.org/w/api.php?action=wbsearchentities&search="+ hit["key"] +"&language=en&format=json"
         r = requests.get(entityQuery).json()
+        isMedication = False
         if len(r["search"])>0:
           for res in r["search"]:
            #print(str(res['id']))
@@ -77,16 +81,19 @@ def main():
            rCode = requests.get(queryByCode).json();
            if "P31" in rCode["entities"][code]["claims"]:
             for code in rCode["entities"][code]["claims"]["P31"]:
-               instanceCode = str(code["mainsnak"]["datavalue"]["value"]["id"]);
-               print(str(code["mainsnak"]["datavalue"]["value"]["id"]));
-               if instanceCode=="Q28885102" or instanceCode=="Q12140":
+               if not isMedication:
+                instanceCode = str(code["mainsnak"]["datavalue"]["value"]["id"]);
+                print(str(code["mainsnak"]["datavalue"]["value"]["id"]));
+                if instanceCode=="Q28885102" or instanceCode=="Q12140":
                     print("Es un medicamento:" +str(hit["key"]))
                     f.write(hit["key"].encode("UTF-8"))
                     f.write("\n".encode("UTF-8"))
+                    isMedication=True
 
 
 
     f.close()
+    fPosts.close()
 
 
 
