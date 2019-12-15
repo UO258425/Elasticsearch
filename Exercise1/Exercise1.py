@@ -1,4 +1,4 @@
-# Para poder usar la función print e imprimir sin saltos de línea
+
 from __future__ import print_function
 
 import datetime
@@ -10,12 +10,11 @@ from elasticsearch import Elasticsearch
 from elasticsearch import helpers
 
 def main():
-    # Queremos imprimir bonito
-    pp = pprint.PrettyPrinter(indent=2)
 
-    # Nos conectamos por defecto a localhost:9200
+
+    # Connect to our index
     es = Elasticsearch(['http://elastic.carlosmanrique.dev:9200'])
-    # En ocasiones las consultas tienen que formalizarse en JSON
+    #Index without stop words
     results = es.search(
         index="reddit-mentalhealth-stopwords",
         body = {
@@ -28,11 +27,11 @@ def main():
                 }
             },
             "aggs":{
-                "Terminos mas significativos":{
+                "Significant terms":{
                     "significant_terms":{
                         "field":"selftext",
-                        "size":100,
-                        "percentage":{
+                        "size":20,
+                        "gnd":{
 
                         },
 
@@ -44,19 +43,19 @@ def main():
         }
         )
 
-    # pp.pprint(results)
-    print(str(results["hits"]["total"]) + " resultados para una query \"rehab\"")
 
-    significantWords =[]
+    print(str(results["hits"]["total"]) + " results for query about \"rehab\"")
+
+    significant =[]
     words = ""
-    # Iteramos sobre los resultados, no es preciso preocuparse de las
-    # conexiones consecutivas que hay que hacer con el servidor ES
-    for hit in results["aggregations"]["Terminos mas significativos"]["buckets"]:
-        # get created date for a repo and fallback to authored_date for a commit
-        print(str(hit["key"]))
-        significantWords.append(hit["key"])
+    f1 = open("significantWordsGND.txt","wb")
+    # Iterate results saving them in a variable to use in second query
+    for hit in results["aggregations"]["Significant terms"]["buckets"]:
+        significant.append(hit["key"])
+        f1.write(hit["key"].encode("UTF-8"))
+        f1.write("\n".encode("UTF-8"))
         words+=" "+str(hit["key"])
-
+    f1.close()
 
 
     secondQuery = {
@@ -72,11 +71,10 @@ def main():
          }
      }
 
+    # Second query upon complete index
     posts = helpers.scan(es,index="reddit-mentalhealth",query=secondQuery)
 
-    f = open("relatedPostsPercentage.txt", "wb")
-    # Iteramos sobre los resultados, no es preciso preocuparse de las
-    # conexiones consecutivas que hay que hacer con el servidor ES
+    f = open("relatedPostsGND.txt", "wb")
     for hit in posts:
         f.write('{ "author" : "'.encode("UTF-8"))
         f.write(hit["_source"]["author"].encode("UTF-8"))
@@ -91,10 +89,7 @@ def main():
 
     f.close()
 
-    # Preparar consultas con default_operator y docvalue_fields, por ejemplo
-    # para obtener los textos únicamente para hacer data mining...
-    #
-    # ...
+
 
 if __name__ == '__main__':
     main()
