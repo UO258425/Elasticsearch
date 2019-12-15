@@ -21,7 +21,7 @@ def main():
         "Subreddits relevantes": {
           "terms": {
             "field": "subreddit.keyword",
-            "size": 10
+            "size": 20 
           }
         }
       }
@@ -55,7 +55,7 @@ def main():
                 "Most significant terms":{
                     "significant_terms":{
                         "field": "selftext",
-                        "size":1000,
+                        "size":40000,
                         "gnd":{}
                     }
                 }
@@ -66,11 +66,12 @@ def main():
     popOutput = [line.rstrip("\n") for line in open("popOutput.txt")]
     result = list()
     for i in comorbiditiesQuery["aggregations"]["Most significant terms"]["buckets"]:
-        if i["key"] in popOutput:
+        if i["key"].lower() in popOutput:
             result.append(i["key"])
             print(i["key"])
 
-
+    resultFile = open("result.txt","wt")
+    resultFile.write("\n".join(result))
         
 if __name__ == '__main__':
     main()
