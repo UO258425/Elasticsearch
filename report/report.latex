@@ -105,15 +105,19 @@ the results, we obtained that 75\% of the significant terms were identical.
 However, increasing the number of significant terms to more than 100 reduced
 this accuracy down to 40\%.
 
-Results with 20 significant terms:
+\begin{figure}[h!]
+    \includegraphics[width=\textwidth]{./images/image1.jpg}
+    \caption{Results with 20 significant terms}
+\end{figure}
 
-\includegraphics[width=\textwidth]{./images/image1.jpg}
+\begin{figure}[h!]
+    \includegraphics[width=\textwidth]{./images/image2.jpg}
+    \caption{Results with 150 significant terms}
+\end{figure}
 
-Results with 150 significant terms:
 
-\includegraphics[width=\textwidth]{./images/image2.jpg}
+\clearpage
 
-\newpage
 \section{Exercise 3}
 
 To develop this exercise we perform a query pretty similar to the one in the
@@ -255,6 +259,7 @@ so we removed anything else from the json objects.
     \item That list is converted to a dictionary [key, value] containing the
         word and the frequency of appearance.
     \item The dictionary is sorted in descending order.
+    \item We take the words with a frequency greater than 10.
 \end{enumerate}
 
 Then we store the output in a file called \textbf{popOutput.txt}.
@@ -265,10 +270,10 @@ comorbidites", "suicide comorbidities" and "suicidal ideation".
 
 \subsection{Expanding the first Elastic query}
 
-After retrieving the main subreddits that have information about suicide. We
+After retrieving the main subreddits that have information about suicide we
 perform a query in order to get the 20000 most frequent words by using GND in
-each subreddit. As by default elastic dont allow to get more than 1000 results
-at once, is necessary to set a bigger limit using cerebro:
+each subreddit. As by default ElasticSearch dont allow to get more than 1000 results
+at once, it is mandatory to set a bigger limit using cerebro:
 
 \begin{verbatim}
 PUT \_cluster/settings
