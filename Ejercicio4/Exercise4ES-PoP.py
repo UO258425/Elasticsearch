@@ -15,7 +15,7 @@ def printList(aList):
 
 #First we collect just the titles of the pop documents
 titles = []
-json_file = open('PoPAlcoholismComorbidity.json')
+json_file = open('pop.json')
 popDocuments = simplejson.load(json_file)
 for paper in popDocuments:
     for attribute, value in paper.items():
@@ -51,7 +51,7 @@ mostRelevantPoPWords = list()
 
 for entry in wordfreq:
     try:
-        if entry[0] >= 5:
+        if entry[0] >= 10 and not (entry[0].isdigit()):
             mostRelevantPoPWords.append(entry[1].lower())
     except:
         pass

@@ -7,3 +7,5 @@
 \contentsline {section}{\numberline {4}Exercise 4}{8}% 
 \contentsline {subsection}{\numberline {4.1}Retrieving the Reddit results}{8}% 
 \contentsline {subsection}{\numberline {4.2}Publish or Perish}{8}% 
+\contentsline {subsection}{\numberline {4.3}Expanding the first Elastic query}{9}% 
+\contentsline {subsection}{\numberline {4.4}Understanding the results}{9}% 
