@@ -1,4 +1,5 @@
 \documentclass[a4paper,12pt]{article}
+\usepackage{multicol}
 \usepackage{graphicx}
 \usepackage{minitoc}
 
@@ -11,16 +12,6 @@ UO258454, Violeta Ruiz Martínez}
 \date{\today}
 
 \maketitle
-
-
-
-
-\begin{abstract}
-
-This is the abstract of the project, here we will resume our work briefly
-
-\end{abstract}
-
 
 \tableofcontents
 
@@ -46,6 +37,7 @@ so we perform this first query in this index to get the most optimum results.
 When using percentage we set the maximum number of significant terms to 100
 because it is the one that gets the fewer results. With this metric we get 10
 terms where we consider 5 as relevant:
+\begin{multicols}{3}
 \begin{itemize}
 \item Rehabilitation
 \item Rehab
@@ -53,11 +45,13 @@ terms where we consider 5 as relevant:
 \item Criminals
 \item Librium (a medical drug)
 \end{itemize}
+\end{multicols}
 
 \subsection{Google normalized distance}
 When we use the Google normalized distance we set the maximum number of
 significant terms to 20 as this metric and the Chi square get the most number of
 results. With this metric we got 20 terms where we consider 9 as relevant:
+\begin{multicols}{3}
 \begin{itemize}
 \item Rehab
 \item Rehabilitation
@@ -69,11 +63,13 @@ results. With this metric we got 20 terms where we consider 9 as relevant:
 \item Homicide
 \item Detox
 \end{itemize}
+\end{multicols}
 
 \subsection{Chi square}
 When we used the Chi square metric we also set the maximum number of significant
 terms to 20 as we did for the Google one. Using this metric we also get 20 terms
 and we consider 9 as relevant:
+\begin{multicols}{3}
 \begin{itemize}
 \item Rehab
 \item Rehabilitation
@@ -85,6 +81,7 @@ and we consider 9 as relevant:
 \item Outpatient
 \item Hospital
 \end{itemize}
+\end{multicols}
 
 After getting the significant terms we perform a second query searching for
 these words in the selftext.
@@ -118,6 +115,88 @@ Results with 150 significant terms:
 \newpage
 \section{Exercise 3}
 
+To develop this exercise we perform a query pretty similar to the one in the
+first exercise, we look for the most significant terms in the \textbf{selftext}
+field of the post that match \textit{"prescribed me"}, \textit{"prescr*"}, or
+\textit{"antidepressant*"}. We just use this three possible matches because we
+noticed that adding too much terms got worse results for us.
+
+In the aggregation we specified a maximum size of 100 and used Google Normalized
+Distance as metric because after trying with all of the ones that we used to
+develop the previous exercises we noticed that GND was the one that was working
+best in this case.
+
+When though we are working upon an index where the stop words have been removed
+we added some other words that must not be taken into account as significant
+terms in the aggregation, which are words that are usually related to the taking
+of a medication such as types of doctors who are usually the ones allowed to
+make a prescription, illnesses and symptoms, side effects, or medication types
+such as pills, tablets and so on.
+
+After performing this query we end up with a list of a hundred words where some
+are medication names and some are not and for that matter we validate it by
+using Wikidata.
+
+In order to make this validation automatically we use the MediaWiki API to get
+the data from Wikidata. First for each significant term that we have obtained we
+perform a first query to Wikidata in order to get all of the entities which name
+matches a given significant term. As this can recover more than one result we go
+through it getting the code for each of the entities recovered and perform the
+last query to Wikidata using that code. This last query recovers all the
+information about the entity. In this last step we check if the entity is an
+\textit{"instance of"} ("P31") medication("Q12140") ir pharmaceutical product
+("q28885102") and if it is we take that result as valid.
+
+After the validation we get a list of 49 medication names which are:
+
+\begin{multicols}{3}
+\begin{itemize}
+    \item Zoloft
+    \item lexapro
+    \item amoxicillin
+    \item fluexetine
+    \item prednisolone
+    \item prozac
+    \item sertraline
+    \item metronidazole
+    \item norepinephrine
+    \item klonopin
+    \item doxycycline
+    \item amitriptyline
+    \item levofloxacin
+    \item escitalopram
+    \item hydroxyzine
+    \item trazodone
+    \item effexor
+    \item paroxetine
+    \item dexamphetamine
+    \item concerta
+    \item duloxetine
+    \item flagyl
+    \item ritalin
+    \item buspar
+    \item valium
+    \item vitamin
+    \item lisinopril
+    \item clindamycin
+    \item intuniv
+    \item lamotrigine
+    \item atarax
+    \item prevacid
+    \item fluticasone
+    \item cipro
+    \item miralax
+    \item gabapentin
+    \item focalin
+    \item methylprednisolone
+    \item alprazolam
+    \item naproxen
+    \item venlafaxine
+    \item strattera
+    \item cyclobenzaprine
+\end{itemize}
+\end{multicols}
+
 \newpage
 \section{Exercise 4}
 
@@ -130,7 +209,7 @@ As we cannot use any expert knowledge as a starting point, we have decided to
 begin using a multi match query about \textbf{"problem with alcohol"} by
 searching the fields selftext, subreddit and title. We take the 10 most relevant
 subreddits from this query which are:
-
+\begin{multicols}{3}
 \begin{itemize}
     \item stopdrinking
     \item AlAnon
@@ -143,6 +222,7 @@ subreddits from this query which are:
     \item alcoholicsanonymous
     \item offmychest
 \end{itemize}
+\end{multicols}
 
 \subsection{Publish or Perish}
 
@@ -156,7 +236,8 @@ follows:
 
 \begin{enumerate}
     \item  We have realized that the only relevant information is contained in the title,
-so we removed anything else from the json objects. 
+so we removed anything else from the json objects.
+    \item Remove all the titles that are not written in english.
     \item All English stopwords have been removed.
     \item The list of titles has become a list of words
     \item That list is converted to a dictionary [key, value] containing the
